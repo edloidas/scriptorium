@@ -1,0 +1,215 @@
+---
+description: React component standards and best practices
+globs: *.tsx
+alwaysApply: false
+---
+
+# React Component Standards
+
+## Component Structure
+
+```typescript
+// Always use functional components
+// Define and export Props from the same component's file
+// Always add component name before Props, e.g. `ButtonProps` for `Button` component
+// Avoid using default export in component file
+
+export type MyComponentProps = {
+  title: string;
+  // Drop prefixes for boolean flags
+  active?: boolean;
+  // Put `className?` and `children?` last in the Props definition
+  className?: string;
+  children?: ReactNode;
+};
+
+export function MyComponent({
+  title,
+  active = false,
+  className,
+  children,
+}: MyComponentProps) {
+  // Hoist store/ref hooks at the very top
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Other hooks next: state, memo, effects, etc.
+  const [count, setCount] = useState(0);
+  const expensive = useMemo(() => heavyCalc(data), [data]);
+
+  // Effects are last hooks, if possible
+  useEffect(() => { /* side-effect */ }, [data]);
+
+  // If className list grows long, factor into `classNames` before return
+  const classNames = twMerge(
+    'p-4 rounded shadow',
+    active && 'bg-blue-500',
+    className,
+  );
+
+  // Early return for loading / error / guard clauses
+  if (!data) return <LoadingIndicator />;
+
+  // Set ARIA attributes where appropriate
+  return (
+    <div
+      ref={containerRef}
+      className={classNames}
+      aria-pressed={active}
+      role='button'
+    >
+      <h1>{title}</h1>
+      {children}
+    </div>
+  );
+}
+```
+
+## Early Return Best Practices
+
+```typescript
+const MyContent = ({ isReady }: Props) => {
+  // Prefer early return over conditional fragments
+  // DON'T: Wrap conditional content in fragments
+  // return <>{isReady && <div>Content</div>}</>;
+
+  // DO: Return early with null/undefined
+  if (!isReady) return null;
+  return <div>Content</div>;
+};
+```
+
+## Component Display Names
+
+```typescript
+// Arrow functions: MUST set displayName
+export const Button = ({ children }: ButtonProps) => <button>{children}</button>;
+Button.displayName = 'Button';
+
+// memo(): MUST set displayName
+export const List = React.memo(({ items }: Props) => <ul>...</ul>);
+List.displayName = 'List';
+
+// forwardRef(): MUST set displayName
+export const Input = React.forwardRef<HTMLInputElement, Props>((props, ref) => <input ref={ref} />);
+Input.displayName = 'Input';
+
+// Function declarations: displayName NOT needed (auto-inferred)
+export function UserCard({ name }: Props) { return <div>{name}</div>; }
+```
+
+## useEffect Best Practices
+
+```typescript
+// DON'T: Transform data for rendering in useEffect
+// DO: Calculate during render or use useMemo
+
+// DON'T: Handle user events in useEffect
+// DO: Use event handlers directly
+
+// DON'T: Reset state when prop changes with useEffect
+// DO: Use key prop to reset component state
+function ProfilePage({ userId }) {
+  return <Profile key={userId} userId={userId} />;
+  // Component remounts, state resets automatically
+}
+
+// CORRECT uses of useEffect:
+// External system sync
+useEffect(() => {
+  const ws = new WebSocket(url);
+  ws.connect();
+  return () => ws.disconnect();
+}, [url]);
+
+// Data fetching (though prefer React Query/SWR)
+useEffect(() => {
+  fetch(`/api/user/${userId}`)
+    .then(res => res.json())
+    .then(setUser);
+}, [userId]);
+```
+
+## useCallback Best Practices
+
+```typescript
+// DON'T use useCallback when:
+// - Not passed to memo() components
+// - Not used as dependency in hooks
+// - Function doesn't capture scope values
+
+// DO use useCallback when:
+// - Passing to memo() components
+const handleClick = useCallback(() => setCount(c => c + 1), []);
+return <MemoizedButton onClick={handleClick} />;
+
+// - Function is dependency of other hooks
+const fetchData = useCallback(() => fetch(url), [url]);
+useEffect(() => { fetchData() }, [fetchData]);
+```
+
+## useMemo Best Practices
+
+```typescript
+// DON'T use useMemo for:
+// - Simple calculations
+// - Primitives that aren't dependencies
+
+// DO use useMemo for:
+// - Expensive calculations (filtering/sorting large arrays)
+const filtered = useMemo(() => bigArray.filter(...).sort(...), [bigArray]);
+
+// - Objects/arrays passed to memo() children or used as dependencies
+const options = useMemo(() => ({ sort: true, filter }), [filter]);
+return <MemoizedList options={options} />;
+```
+
+## Extending Component Props
+
+```typescript
+// DO: Use ComponentPropsWithoutRef for standard components
+import { ComponentPropsWithoutRef } from 'react';
+
+type ButtonProps = {
+  variant?: 'primary' | 'secondary';
+  loading?: boolean;
+} & ComponentPropsWithoutRef<'button'>;
+
+export function Button({ variant = 'primary', loading, ...props }: ButtonProps) {
+  return <button {...props} />;
+}
+
+// DO: Use ComponentPropsWithRef when forwarding refs
+import { ComponentPropsWithRef, forwardRef } from 'react';
+
+type InputProps = {
+  label?: string;
+  error?: string;
+} & ComponentPropsWithRef<'input'>;
+
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ label, error, ...props }, ref) => {
+    return <input ref={ref} {...props} />;
+  }
+);
+```
+
+## Performance Patterns
+
+```typescript
+// 1. Keep renders cheap & predictable
+// Split UI into small, pure components; wrap heavy ones in React.memo
+const ImageGrid = React.memo(function ImageGrid({ images }: { images: Image[] }) {
+  return images.map(img => <img key={img.id} src={img.src} />);
+});
+
+// 2. `useMemo` only for expensive calculations or reference-equality
+const sorted = useMemo(() => heavySort(list), [list]);
+
+// 3. `useCallback` only when a child/hook depends on function identity
+const handleSave = useCallback((u: User) => onSave(u), [onSave]);
+<SaveButton onClick={handleSave} />;
+
+// 4. Prefer `useEffect`; reserve `useLayoutEffect` for sync DOM reads/writes
+
+// 5. Throttle / debounce high-frequency events (scroll, resize)
+```

@@ -1,0 +1,154 @@
+---
+description: Storybook stories standards and best practices
+globs: *.stories.tsx
+alwaysApply: false
+---
+
+# Storybook Stories Standards
+
+## Story Organization & Grouping
+
+Use hierarchical grouping with `/` separator to organize stories:
+
+```typescript
+// DO: Group stories by purpose using slash separator
+export const Basic: Story = {
+  name: 'Examples / Basic',
+  render: () => <Component />
+};
+
+export const WithIcons: Story = {
+  name: 'Examples / With Icons',
+  render: () => <Component icon={Icon} />
+};
+
+export const Disabled: Story = {
+  name: 'States / Disabled',
+  render: () => <Component disabled />
+};
+```
+
+### Standard Groups
+
+Use these standard groups in order:
+
+1. **Examples** - Basic usage patterns for newcomers
+2. **States** - Visual states of the component
+3. **Features** - Specific capabilities and configurations
+4. **Behavior** - Interaction patterns and accessibility
+
+## Interactive Playground
+
+Create an "Interactive" story for components with meaningful configurable props:
+
+```typescript
+export const Interactive: Story = {
+  name: 'Features / Interactive',
+  render: () => {
+    const [variant, setVariant] = useState<'solid' | 'outline'>('solid');
+    const [size, setSize] = useState<'sm' | 'md' | 'lg'>('md');
+
+    return (
+      <div className='flex flex-col gap-y-4 p-4'>
+        <div className='flex gap-4 text-sm'>
+          <label>
+            Variant:
+            <select value={variant} onChange={(e) => setVariant(e.target.value)}>
+              <option value='solid'>Solid</option>
+              <option value='outline'>Outline</option>
+            </select>
+          </label>
+        </div>
+        <Component variant={variant} size={size} />
+      </div>
+    );
+  },
+};
+```
+
+## Story Wrapper Styling
+
+Use consistent wrapper patterns for story layout:
+
+```typescript
+// Centered single component
+<div className='flex flex-col gap-y-3 p-4 items-center'>
+  <Component />
+</div>
+
+// Multiple components in a row
+<div className='flex gap-4 p-4'>
+  <Component />
+  <Component />
+</div>
+
+// With description
+<div className='flex flex-col gap-y-3 p-4 items-center'>
+  <div className='max-w-120 text-sm text-gray-500'>
+    Description text here
+  </div>
+  <Component />
+</div>
+```
+
+## Story Naming Conventions
+
+```typescript
+// DO: Use PascalCase for export names
+export const BasicExample: Story = { name: 'Examples / Basic' };
+export const WithDisabledItems: Story = { name: 'Behavior / Disabled Items' };
+
+// DO: Use descriptive, clear names
+export const AlignEnd: Story = { name: 'Features / Align End' };
+```
+
+## State Management in Stories
+
+```typescript
+// DO: Use local state for interactive stories
+export const Controlled: Story = {
+  render: () => {
+    const [value, setValue] = useState('');
+    return <Input value={value} onChange={setValue} />;
+  },
+};
+
+// DO: Display current state when useful
+<div className='text-sm'>
+  <span className='text-gray-500'>Selected: </span>
+  <span className='font-semibold'>{value}</span>
+</div>
+
+// DON'T: Use complex state management (Zustand, nanostores) in stories
+```
+
+## Story File Structure
+
+```typescript
+import { Component } from './component';
+import type { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
+// Icons last
+import { Icon1, Icon2 } from 'lucide-react';
+
+type Story = StoryObj<typeof Component>;
+
+export default {
+  title: 'Components/Component',
+  component: Component,
+  parameters: { layout: 'centered' },
+  tags: ['autodocs'],
+} satisfies Meta<typeof Component>;
+
+// 1. Examples group
+export const Basic: Story = { ... };
+export const WithVariant: Story = { ... };
+
+// 2. Features group
+export const Interactive: Story = { ... };
+export const CustomStyled: Story = { ... };
+
+// 3. Behavior group
+export const FocusNavigation: Story = { ... };
+export const DisabledItems: Story = { ... };
+```

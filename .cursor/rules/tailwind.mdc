@@ -1,0 +1,156 @@
+---
+description: Tailwind CSS and styling utilities standards
+globs: *.tsx
+alwaysApply: false
+---
+
+# Tailwind CSS & Styling Standards
+
+## Class Name Utilities
+
+### `cn` (clsx/twMerge wrapper) - Default Choice
+
+```typescript
+// Use cn for most dynamic class combinations
+const buttonClasses = cn(
+  'px-4 py-2 rounded font-medium',
+  disabled && 'opacity-50 cursor-not-allowed',
+  variant === 'primary' && 'bg-blue-500 text-white',
+  className,
+);
+
+// Use cn for simple conditional classes
+<div className={cn('flex gap-2', isVertical && 'flex-col')} />
+
+// When using `className` prop, pass it as the last argument in cn()
+// This allows parent components to override styles
+const classes = cn(
+  'base-styles',
+  condition && 'conditional-styles',
+  className, // Last, so parent can override
+);
+```
+
+### `cva` - Only for Complex Variants
+
+```typescript
+// Use cva ONLY when you have 2+ variant dimensions with multiple options
+const buttonVariants = cva('px-4 py-2 rounded font-medium transition-colors', {
+  variants: {
+    variant: {
+      primary: 'bg-blue-500 text-white hover:bg-blue-600',
+      secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300',
+      ghost: 'bg-transparent hover:bg-gray-100',
+    },
+    size: {
+      sm: 'text-sm px-3 py-1',
+      md: 'text-base px-4 py-2',
+      lg: 'text-lg px-6 py-3',
+    },
+  },
+  defaultVariants: {
+    variant: 'primary',
+    size: 'md',
+  },
+});
+
+// DON'T use cva for simple true/false states - use cn() instead
+```
+
+## Tailwind 4 Best Practices
+
+### Color System
+
+```typescript
+// Use semantic color tokens when available
+<div className="bg-primary text-primary-foreground" />
+
+// Use size-* for equal width and height
+<Icon className="size-4" /> // Not h-4 w-4
+
+// Use logical properties
+<div className="ps-4 me-2" /> // padding-start, margin-end
+
+// Consistent gap usage in flex/grid
+<div className="flex gap-4" /> // Not space-x-4
+```
+
+### Responsive Design
+
+```typescript
+// Mobile-first approach
+<div className="text-sm md:text-base lg:text-lg" />
+```
+
+## When to Extract Classes to Variables
+
+**Extract when:**
+- Complex conditional logic
+- More than 6 classes on a single line, 4+ lines, or 80+ characters
+- Reused in multiple places (2+ uses) in the same file
+
+```typescript
+const containerClasses = cn(
+  'relative flex items-center justify-between',
+  'gap-4 rounded-lg border border-gray-200',
+  'bg-white p-6 shadow-sm',
+  isActive && 'ring-2 ring-blue-500',
+);
+```
+
+**Keep inline when:**
+- Simple static classes (up to 5)
+- Single simple condition
+- Obvious connection between classes and element
+
+```typescript
+<div className="flex items-center gap-2" />
+<button className={cn('px-4 py-2', disabled && 'opacity-50')} />
+```
+
+## Component Styling Patterns
+
+```typescript
+export function Component({ className, ...props }: ComponentProps) {
+  // Always allow className override as last argument
+  return (
+    <div
+      className={cn(
+        // Base styles first
+        'relative flex items-center gap-2',
+        // Conditional styles
+        props.disabled && 'pointer-events-none select-none opacity-30',
+        // User overrides last
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+```
+
+### State Management with Data Attributes
+
+```typescript
+// Use data-* attributes for state-based styling
+<li
+  data-active={isActive}
+  data-selected={isSelected}
+  className="option data-[active=true]:bg-gray-100 data-[selected=true]:bg-blue-100"
+>
+  Option
+</li>
+```
+
+## Anti-patterns to Avoid
+
+```typescript
+// String concatenation for classes
+<div className={'text-' + size} /> // Breaks Tailwind's compiler
+
+// Mixing Tailwind with inline styles
+<div className="p-4" style={{ margin: '10px' }} />
+
+// Using important modifier everywhere
+<div className="!p-4 !m-2 !text-center" /> // Fix specificity properly
+```

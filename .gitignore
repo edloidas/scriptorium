@@ -1,0 +1,57 @@
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# AI Assistant
+.claude/plans/
+.codex/
+.cursor/commands/
+.cursor/mcp.json
+.mcp.json
+settings.local.json
+
+# Build files
+dist/
+build/
+.next/
+out/
+
+# Development files
+storybook-static/
+*storybook.log
+*.local
+
+# Build tools
+node_modules/
+.pnpm-store/
+
+# Database
+packages/db/src/generated/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Misc
+.cache/
+.temp/
+.tmp/
+.eslintcache
+
+# Environment
+.env
+.env.local
+.env.*.local
+!.env.example
+!.env.local.example
