@@ -31,6 +31,10 @@ vp install          # install dependencies (after pulling changes)
 - `vp run typecheck` — `tsgo --noEmit` (standalone typecheck with TypeScript Go)
 - `vp run test:ci` — `vp test --run --coverage`
 
+## General
+
+**When running locally, never commit or push changes unless explicitly asked.** Make the changes, verify they work, then stop — do not proceed to `git commit` or `git push` without a direct instruction.
+
 ## Git & GitHub
 
 Conventional commit format throughout. Types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `style`, `ci`.
