@@ -7,17 +7,20 @@ Scriptorium is a visual editor for crafting branching game dialogs. Built as a f
 ## Core Layers
 
 ### Frontend Layer
+
 - **Framework**: Next.js 15 with App Router
 - **UI**: React 19 + TailwindCSS 4
 - **3D Visualization**: React Three Fiber for node-based dialog editing
 - **State**: React Query (via tRPC) for server state, React state for UI
 
 ### API Layer
+
 - **Protocol**: tRPC for end-to-end type safety
 - **Transport**: HTTP batching with superjson serialization
 - **AI Integration**: Vercel AI SDK with SSE streaming
 
 ### Data Layer
+
 - **Database**: PostgreSQL
 - **ORM**: Prisma 6
 - **Schema**: Users, Projects, Dialogs with JSON content
@@ -37,18 +40,23 @@ scriptorium/
 ## Key Decisions
 
 ### 1. Monorepo with pnpm Workspaces
+
 Enables code sharing between packages while maintaining clear boundaries.
 
 ### 2. tRPC for API
+
 Type-safe API calls without code generation. Changes to API automatically reflect in client types.
 
 ### 3. React Three Fiber for 3D
+
 Dialog trees rendered as interactive 3D node graphs. Enables intuitive visual editing.
 
 ### 4. AI-Assisted Writing
+
 Vercel AI SDK provides streaming text generation for dialog suggestions.
 
 ### 5. Storybook for Components
+
 Component development and documentation in isolation.
 
 ## Technology Stack
@@ -69,6 +77,7 @@ Component development and documentation in isolation.
 4. **Database** → PostgreSQL
 
 For AI features:
+
 1. **Client** → AI SDK useChat hook
 2. **API Route** → Vercel AI SDK streamText
 3. **OpenAI API** → SSE response stream

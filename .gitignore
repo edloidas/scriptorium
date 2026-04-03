@@ -1,57 +1,34 @@
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
-*~
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
 
-# AI Assistant
-.claude/plans/
-.codex/
-.cursor/commands/
-.cursor/mcp.json
-.mcp.json
-settings.local.json
+# testing
+/coverage
+/reports
 
-# Build files
-dist/
+# production
 build/
-.next/
-out/
+dist/
+temp/
+dev-dist/
 
-# Development files
-storybook-static/
-*storybook.log
-*.local
+# ai
+TASKS.md
+.claude/plans/
 
-# Build tools
-node_modules/
-.pnpm-store/
-
-# Database
-packages/db/src/generated/
-
-# OS files
+# misc
+Desktop.ini
 .DS_Store
-Thumbs.db
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Logs
-logs/
-*.log
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
 
-# Misc
-.cache/
-.temp/
-.tmp/
 .eslintcache
 
-# Environment
-.env
-.env.local
-.env.*.local
-!.env.example
-!.env.local.example
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
