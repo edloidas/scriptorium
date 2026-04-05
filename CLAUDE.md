@@ -4,15 +4,24 @@
 
 **scriptorium** is a visual editor for crafting branching game dialogs. Stack: React 19, TypeScript, Tailwind CSS v4, nanostores, ReactFlow, Vite. Built as a SPA.
 
+**Monorepo structure** (`pnpm` workspaces):
+
+- `packages/core` — `@scriptorium/core`: shared domain schema, serialization, validation (Zod). Runtime-neutral.
+- `packages/web` — `@scriptorium/web`: React SPA, the main editor application.
+
 ## Commands
 
-Use `vp` (Vite+) directly. Do not call `pnpm`/`npm` for dev tasks.
+Run `vp` commands from within `packages/web/` or use `pnpm --filter` from the root.
 
 > **Cloud environments:** If `vp` is not available globally, use `pnpm exec vp ...` as a fallback. Locally, run `vp` directly.
 
 ```bash
-vp run build        # full pipeline: clean + tsgo + build
-vp run check        # full check: format + lint + typecheck
+# From root (preferred for CI and scripts)
+pnpm --filter @scriptorium/web exec vp dev
+pnpm --filter @scriptorium/web exec vp check
+pnpm --filter @scriptorium/web run build
+
+# From packages/web/ (preferred for local dev)
 vp dev              # start dev server
 vp build            # production build
 vp check            # format + lint (no typecheck)
@@ -24,7 +33,7 @@ vp fmt              # format with Oxfmt
 vp install          # install dependencies (after pulling changes)
 ```
 
-**Composite scripts** (run via `pnpm` or `vp run`):
+**Composite scripts** (run via `pnpm` or `vp run` from `packages/web/`):
 
 - `vp run build` — `clean && tsgo && vp build` (full production pipeline)
 - `vp run check` — `vp check && vp run typecheck` (full check: fmt + lint + tsgo typecheck)

@@ -14,6 +14,9 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/web
 
     steps:
       - uses: actions/checkout@v4
@@ -37,11 +40,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage
-          path: coverage/
+          path: packages/web/coverage/
 
   build:
     needs: test
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/web
 
     steps:
       - uses: actions/checkout@v4
@@ -58,5 +64,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: dist
-          path: dist/
+          path: packages/web/dist/
           retention-days: 30

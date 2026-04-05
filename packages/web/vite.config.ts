@@ -25,7 +25,7 @@ export default defineConfig({
       builtin: true,
       es2024: true,
     },
-    ignorePatterns: ['node_modules/', 'build/', 'public/', 'dist/', 'eslint.config.js', '**/*.d.ts'],
+    ignorePatterns: ['node_modules/', 'build/', 'public/', 'dist/', 'coverage/', 'eslint.config.js', '**/*.d.ts'],
     rules: {
       // Correctness overrides
       'no-unused-vars': [
@@ -170,7 +170,7 @@ export default defineConfig({
       ],
     },
     sortPackageJson: false,
-    ignorePatterns: ['utils/'],
+    ignorePatterns: ['dist/', 'coverage/'],
   },
   test: {
     environment: 'jsdom',

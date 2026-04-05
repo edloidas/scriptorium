@@ -1,11 +1,11 @@
 # dependencies
-/node_modules
+node_modules/
 /.pnp
 .pnp.js
 
 # testing
-/coverage
-/reports
+coverage/
+reports/
 
 # production
 build/
@@ -16,6 +16,8 @@ dev-dist/
 # ai
 TASKS.md
 .claude/plans/
+.claude/PRD.md
+.superpowers/
 
 # misc
 Desktop.ini
