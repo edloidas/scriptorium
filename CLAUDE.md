@@ -1,28 +1,23 @@
-# CLAUDE.md
-
-## Project
-
-**scriptorium** is a visual editor for crafting branching game dialogs. Stack: React 19, TypeScript, Tailwind CSS v4, nanostores, ReactFlow, Vite. Built as a SPA.
+**scriptorium** is a visual editor for crafting branching game dialogs. Stack: React 19, TypeScript, Tailwind CSS v4, nanostores, ReactFlow, Vite Plus. Built as a SPA.
 
 **Monorepo structure** (`pnpm` workspaces):
 
 - `packages/core` — `@scriptorium/core`: shared domain schema, serialization, validation (Zod). Runtime-neutral.
 - `packages/web` — `@scriptorium/web`: React SPA, the main editor application.
 
+**When running locally, never commit or push changes unless explicitly asked.** Make the changes, verify they work, then stop.
+
+**No AI footers:** Do not add "Drafted with AI assistance", "Generated with …", or similar lines to any output (issues, PRs, commits, comments).
+
 ## Commands
 
-Run `vp` commands from within `packages/web/` or use `pnpm --filter` from the root.
+Run `vp` commands from within `packages/web/`. From root, prefix with `pnpm --filter @scriptorium/web exec` (for `vp` commands) or `pnpm --filter @scriptorium/web run` (for scripts).
 
-> **Cloud environments:** If `vp` is not available globally, use `pnpm exec vp ...` as a fallback. Locally, run `vp` directly.
+> **Cloud environments:** If `vp` is not available globally, use `pnpm exec vp ...` as a fallback.
 
 ```bash
-# From root (preferred for CI and scripts)
-pnpm --filter @scriptorium/web exec vp dev
-pnpm --filter @scriptorium/web exec vp check
-pnpm --filter @scriptorium/web run build
-
-# From packages/web/ (preferred for local dev)
-vp dev              # start dev server
+vp dev              # start dev server — assume it's already running; only start when
+                    # explicitly needed and stop it when done testing
 vp build            # production build
 vp check            # format + lint (no typecheck)
 vp test             # run Vitest (watch mode)
@@ -33,68 +28,37 @@ vp fmt              # format with Oxfmt
 vp install          # install dependencies (after pulling changes)
 ```
 
-**Composite scripts** (run via `pnpm` or `vp run` from `packages/web/`):
+**Composite scripts** (via `pnpm` or `vp run` from `packages/web/`):
 
-- `vp run build` — `clean && tsgo && vp build` (full production pipeline)
-- `vp run check` — `vp check && vp run typecheck` (full check: fmt + lint + tsgo typecheck)
-- `vp run typecheck` — `tsgo --noEmit` (standalone typecheck with TypeScript Go)
-- `vp run test:ci` — `vp test --run --coverage`
-
-## General
-
-**When running locally, never commit or push changes unless explicitly asked.** Make the changes, verify they work, then stop — do not proceed to `git commit` or `git push` without a direct instruction.
+- `vp run build` — full production pipeline (clean + tsgo + vp build)
+- `vp run check` — full check: fmt + lint + tsgo typecheck
+- `vp run typecheck` — standalone typecheck (`tsgo --noEmit`)
+- `vp run test:ci` — CI test run with coverage
 
 ## Git & GitHub
 
-Conventional commit format throughout. Types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `style`, `ci`.
-
-**`gh` CLI:** Do not assume it's available — use raw `git` commands if missing.
-
-**No AI footers:** Do not add "Drafted with AI assistance" or similar lines to issue or PR bodies.
+Conventional commits: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `style`, `ci`. Use raw `git` — do not assume `gh` CLI is available.
 
 ### Issue Labels
 
-Each issue gets one **main** label + 0–2 **supportive** labels.
-
-- **Main** (exactly one): `bug`, `feature`, `improvement`, `epic`
-- **Supportive** (optional): `UI/UX`, `DX`, `AI`, `wontfix`
+One **main** label (`bug`, `feature`, `improvement`, `epic`) + 0–2 **supportive** (`UI/UX`, `DX`, `AI`, `wontfix`).
 
 ### Issues
 
-- **Title**: `<type>: <description>` — e.g. `feat: add dialog node editor`
-- **Body**:
-
-  ```
-  <4–8 sentence description: what, what's affected, how to reproduce, impact>
-
-  #### Rationale             ← optional
-  <why this needs to be fixed or implemented>
-
-  #### References            ← optional
-
-  #### Implementation Notes  ← optional
-  <any details, if already planned and described>
-  ```
+- **Title:** `<type>: <description>`
+- **Body:** 4–8 sentences (what, affected area, reproduction, impact). Optional sections: `#### Rationale`, `#### References`, `#### Implementation Notes`.
 
 ### Commits
 
-- **With issue**: `<Issue Title> #<number>` — e.g. `feat: add dialog node editor #12`
-- **Without issue**: `<type>: <description>`
-- **Body** (optional): past tense, one line per change, ~2–8 lines, backticks for code refs
-- PRs should contain a single commit; squash and force-push before merging unless combining multiple tasks
+- **With issue:** `<Issue Title> #<number>` — e.g. `feat: add dialog node editor #12`
+- **Without issue:** `<type>: <description>`
+- **Body** (optional): past tense, one line per change, ~2–8 lines, backticks for code refs.
+- PRs should contain a single commit; squash and force-push before merging.
 
 ### Pull Requests
 
-- **Title**: `<type>: <description> #<number>`
-- **Body**: concisely explain what and why, no emojis, one blank line between sections.
-
-  ```
-  <summary of changes>
-
-  Closes #<number>
-
-  [Claude Code session](<link>)
-  ```
+- **Title:** `<type>: <description> #<number>`
+- **Body:** concise what/why, no emojis, one blank line between sections. End with `Closes #<number>` and a `[Claude Code session](<link>)` line.
 
 ## Toolchain
 
@@ -105,23 +69,3 @@ This project uses [Vite+](https://voidzero.dev/vite-plus) (`vp` CLI) wrapping Vi
 - Import from `vite-plus`, not `vite` or `vitest` (e.g. `import { defineConfig } from 'vite-plus'`, `import { vi } from 'vite-plus/test'`)
 - Don't install `vitest`, `oxlint`, `oxfmt`, or `tsdown` directly — Vite+ bundles them
 - Use `vp dlx` instead of `npx`/`pnpm dlx`; `vp add`/`vp remove` for dependencies
-
-## Code Standards
-
-Detailed rules in `.claude/rules/`:
-
-- `typescript.md` - TypeScript conventions
-- `react.md` - React component patterns
-- `tailwind.md` - Styling conventions
-- `testing.md` - Test patterns
-- `comments.md` - Documentation style
-
-## Skills
-
-- `issue-writer` - Create or modify GitHub issues
-- `docs-finder` - Search documentation
-
-## External Docs
-
-Use Context7 MCP for React, TailwindCSS, ReactFlow documentation.
-Request specific topics, not full manuals.
