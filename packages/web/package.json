@@ -1,5 +1,5 @@
 {
-  "name": "@scriptorium/web",
+  "name": "@lorequary/web",
   "version": "0.1.0",
   "private": true,
   "homepage": "./",
@@ -7,7 +7,7 @@
   "dependencies": {
     "@nanostores/deepmap": "^0.0.1",
     "@nanostores/react": "^1.1.0",
-    "@scriptorium/core": "workspace:*",
+    "@lorequary/core": "workspace:*",
     "@tanstack/react-query": "^5.96.2",
     "@tanstack/react-router": "^1.168.10",
     "clsx": "^2.1.1",

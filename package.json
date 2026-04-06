@@ -1,16 +1,16 @@
 {
-  "name": "scriptorium",
+  "name": "lorequary",
   "version": "0.1.0",
   "author": "Mikita Taukachou <edloidas@gmail.com> (https://edloidas.io)",
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "pnpm --filter @scriptorium/web run build",
-    "check": "pnpm --filter @scriptorium/web run check",
-    "test": "pnpm --filter @scriptorium/web run test",
-    "test:ci": "pnpm --filter @scriptorium/web run test:ci",
-    "dev": "pnpm --filter @scriptorium/web exec vp dev",
-    "prepare": "pnpm --filter @scriptorium/web run prepare"
+    "build": "pnpm --filter @lorequary/web run build",
+    "check": "pnpm --filter @lorequary/web run check",
+    "test": "pnpm --filter @lorequary/web run test",
+    "test:ci": "pnpm --filter @lorequary/web run test:ci",
+    "dev": "pnpm --filter @lorequary/web exec vp dev",
+    "prepare": "pnpm --filter @lorequary/web run prepare"
   },
   "engines": {
     "node": ">= 22.15.0",

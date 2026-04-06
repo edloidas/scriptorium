@@ -1,9 +1,9 @@
-**scriptorium** is a visual editor for crafting branching game dialogs. Stack: React 19, TypeScript, Tailwind CSS v4, nanostores, ReactFlow, Vite Plus. Built as a SPA.
+**lorequary** is a visual editor for crafting branching game dialogs. Stack: React 19, TypeScript, Tailwind CSS v4, nanostores, ReactFlow, Vite Plus. Built as a SPA.
 
 **Monorepo structure** (`pnpm` workspaces):
 
-- `packages/core` — `@scriptorium/core`: shared domain schema, serialization, validation (Zod). Runtime-neutral.
-- `packages/web` — `@scriptorium/web`: React SPA, the main editor application.
+- `packages/core` — `@lorequary/core`: shared domain schema, serialization, validation (Zod). Runtime-neutral.
+- `packages/web` — `@lorequary/web`: React SPA, the main editor application.
 
 **When running locally, never commit or push changes unless explicitly asked.** Make the changes, verify they work, then stop.
 
@@ -11,7 +11,7 @@
 
 ## Commands
 
-Run `vp` commands from within `packages/web/`. From root, prefix with `pnpm --filter @scriptorium/web exec` (for `vp` commands) or `pnpm --filter @scriptorium/web run` (for scripts).
+Run `vp` commands from within `packages/web/`. From root, prefix with `pnpm --filter @lorequary/web exec` (for `vp` commands) or `pnpm --filter @lorequary/web run` (for scripts).
 
 > **Cloud environments:** If `vp` is not available globally, use `pnpm exec vp ...` as a fallback.
 

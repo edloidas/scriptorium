@@ -30,15 +30,15 @@ importers:
 
   packages/web:
     dependencies:
+      '@lorequary/core':
+        specifier: workspace:*
+        version: link:../core
       '@nanostores/deepmap':
         specifier: ^0.0.1
         version: 0.0.1(nanostores@1.2.0)
       '@nanostores/react':
         specifier: ^1.1.0
         version: 1.1.0(nanostores@1.2.0)(react@19.2.4)
-      '@scriptorium/core':
-        specifier: workspace:*
-        version: link:../core
       '@tanstack/react-query':
         specifier: ^5.96.2
         version: 5.96.2(react@19.2.4)
