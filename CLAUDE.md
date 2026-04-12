@@ -35,6 +35,10 @@ vp install          # install dependencies (after pulling changes)
 - `vp run typecheck` — standalone typecheck (`tsgo --noEmit`)
 - `vp run test:ci` — CI test run with coverage
 
+## Documentation
+
+All docs live in `docs/`, flat structure. Lowercase kebab-case filenames, no date or number prefixes. Add subdirectories (`design/`, `decisions/`) only when file count makes flat navigation painful. `prd.md` is the product requirements document; other files are technical specs named by topic (e.g., `parser.md`, `persistence.md`).
+
 ## Git & GitHub
 
 Conventional commits: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `style`, `ci`. Use raw `git` — do not assume `gh` CLI is available.
