@@ -6,9 +6,9 @@
   "type": "module",
   "scripts": {
     "build": "pnpm --filter @lorequary/web run build",
-    "check": "pnpm --filter @lorequary/web run check",
-    "test": "pnpm --filter @lorequary/web run test",
-    "test:ci": "pnpm --filter @lorequary/web run test:ci",
+    "check": "pnpm -r --parallel run check",
+    "test": "pnpm -r --parallel run test",
+    "test:ci": "pnpm -r --parallel run test:ci",
     "dev": "pnpm --filter @lorequary/web exec vp dev",
     "prepare": "pnpm --filter @lorequary/web run prepare"
   },

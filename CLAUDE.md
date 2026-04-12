@@ -3,6 +3,7 @@
 **Monorepo structure** (`pnpm` workspaces):
 
 - `packages/core` — `@lorequary/core`: shared domain schema, serialization, validation (Zod). Runtime-neutral.
+- `packages/parser` — `@lorequary/parser`: expression language parser, validator, and evaluator. Runtime-neutral, zero dependencies.
 - `packages/web` — `@lorequary/web`: React SPA, the main editor application.
 
 **When running locally, never commit or push changes unless explicitly asked.** Make the changes, verify they work, then stop.
